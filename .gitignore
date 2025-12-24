@@ -1,0 +1,13 @@
+# Python artifacts
+__pycache__/
+*.pyc
+venv/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Secrets - DO NOT upload your Google Cloud API keys
+*credential*.json
+*secret*.json
+key.json

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Voyage Ouest Américain</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+    <style>
+        body { margin: 0; padding: 0; }
+        /* La carte prend tout l'écran */
+        #map { height: 100vh; width: 100%; }
+        
+        /* Style des popups (les bulles d'info) */
+        .custom-popup img {
+            width: 100%;
+            max-width: 300px; /* Taille max de l'image */
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .custom-popup h3 {
+            margin: 0;
+            font-family: sans-serif;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <script>
+        // --- 1. Initialisation de la carte ---
+        // On centre sur l'Ouest Américain (Las Vegas environ) avec un zoom de base
+        var map = L.map('map').setView([36.1699, -115.1398], 6);
+
+        // On ajoute le fond de carte (ici OpenStreetMap, gratuit)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // --- 2. Configuration des groupes (Clusters) ---
+        // C'est ce qui permet de faire des ronds avec des chiffres quand on dézoome
+        var markers = L.markerClusterGroup();
+
+        // --- 3. Tes Données (C'est ici que tu modifies !) ---
+        // Format: { lat: Latitude, lon: Longitude, img: "nom_du_fichier.jpg", title: "Lieu" }
+        var photos = [
+            { 
+                lat: 36.0544, 
+                lon: -112.1401, 
+                img: "https://images.unsplash.com/photo-1474044159687-195d0f127146?auto=format&fit=crop&w=400", 
+                title: "Grand Canyon" 
+            },
+            { 
+                lat: 37.8199, 
+                lon: -122.4783, 
+                img: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=400", 
+                title: "Golden Gate Bridge" 
+            },
+            { 
+                lat: 36.1699, 
+                lon: -115.1398, 
+                img: "https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?auto=format&fit=crop&w=400", 
+                title: "Las Vegas Strip" 
+            },
+            { 
+                lat: 37.8651, 
+                lon: -119.5383, 
+                img: "https://images.unsplash.com/photo-1527549993586-dff825b37708?auto=format&fit=crop&w=400", 
+                title: "Yosemite Valley" 
+            },
+            // Ajoute tes propres points ici...
+        ];
+
+        // --- 4. Création des marqueurs ---
+        photos.forEach(function(point) {
+            // Création du contenu HTML de la bulle
+            var popupContent = `
+                <div class="custom-popup">
+                    <img src="${point.img}" alt="${point.title}">
+                    <h3>${point.title}</h3>
+                    <p style="margin: 5px 0 0 0; font-size: 0.8em; color: #666;">${point.lat.toFixed(6)}, ${point.lon.toFixed(6)}</p>
+                </div>
+            `;
+
+            // On crée le marqueur
+            var marker = L.marker([point.lat, point.lon]);
+            
+            // On lui attache la bulle
+            marker.bindPopup(popupContent);
+            
+            // On ajoute le marqueur au groupe de clusters
+            markers.addLayer(marker);
+        });
+
+        // On ajoute finalement le groupe à la carte
+        map.addLayer(markers);
+
+    </script>
+</body>
+</html>
