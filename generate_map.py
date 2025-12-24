@@ -9,8 +9,8 @@ import tkinter as tk
 from tkinter import simpledialog
 
 # Configuration
-INPUT_HTML = "index.html"
-OUTPUT_HTML = "index_with_photos.html"
+INPUT_HTML = "index_ref.html"
+OUTPUT_HTML = "index.html"
 PHOTOS_DIR = "photos"
 
 try:
