@@ -29,16 +29,99 @@
             font-size: 16px;
             color: #333;
         }
+        .custom-popup img {
+            cursor: zoom-in;
+        }
+
+        /* --- Styles du Modal (l'affichage en grand) --- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 10000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.9); 
+        }
+
+        .modal-content {
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            gap: 20px; /* Espace entre les deux images */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content img {
+            max-height: 90vh;
+            max-width: 90vw; /* Par défaut large, ajusté en JS si deux images */
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10001;
+        }
     </style>
 </head>
 <body>
 
     <div id="map"></div>
 
+    <!-- Le Modal pour afficher les images en grand -->
+    <div id="myModal" class="modal" onclick="closeModal(event)">
+        <span class="close" onclick="closeModal(event)">&times;</span>
+        <div class="modal-content">
+            <img id="imgMain">
+            <img id="imgScreenshot" style="display:none;">
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 
     <script>
+        // --- Fonctions pour le Modal ---
+        function openModal(imgSrc, screenshotSrc) {
+            var modal = document.getElementById("myModal");
+            var imgMain = document.getElementById("imgMain");
+            var imgScreen = document.getElementById("imgScreenshot");
+            
+            modal.style.display = "block";
+            imgMain.src = imgSrc;
+            
+            if (screenshotSrc) {
+                imgScreen.src = screenshotSrc;
+                imgScreen.style.display = "block";
+                imgMain.style.maxWidth = "45vw";
+                imgScreen.style.maxWidth = "45vw";
+            } else {
+                imgScreen.style.display = "none";
+                imgMain.style.maxWidth = "90vw";
+            }
+        }
+
+        function closeModal(event) {
+            // On ferme si on clique sur le fond ou la croix, mais pas sur l'image elle-même
+            if (event.target.tagName !== 'IMG') {
+                document.getElementById("myModal").style.display = "none";
+            }
+        }
+
         // --- 1. Initialisation de la carte ---
         // On centre sur l'Ouest Américain (Las Vegas environ) avec un zoom de base
         var map = L.map('map').setView([36.1699, -115.1398], 6);
@@ -497,7 +580,8 @@
         "lat": 38.97172861111111,
         "lon": -119.85438369444444,
         "img": "photos/SAMSUNG_20221123_183528.jpg",
-        "title": "SAMSUNG_20221123_183528.jpg"
+        "title": "SAMSUNG_20221123_183528.jpg",
+        "screenshot": "screenshot/SAMSUNG_20221123_183528.png"
     },
     {
         "lat": 38.2489976,
@@ -569,7 +653,8 @@
         "lat": 37.25561644444444,
         "lon": -112.96173991666667,
         "img": "photos/SAMSUNG_20221128_011540.jpg",
-        "title": "SAMSUNG_20221128_011540.jpg"
+        "title": "SAMSUNG_20221128_011540.jpg",
+        "screenshot": "screenshot/SAMSUNG_20221128_011540.png"
     },
     {
         "lat": 37.22305966666667,
@@ -587,25 +672,29 @@
         "lat": 37.700278000000004,
         "lon": -112.39844500000001,
         "img": "photos/SAMSUNG_20221128_203418.jpg",
-        "title": "SAMSUNG_20221128_203418.jpg"
+        "title": "SAMSUNG_20221128_203418.jpg",
+        "screenshot": "screenshot/SAMSUNG_20221128_203418.png"
     },
     {
         "lat": 37.744411194444446,
         "lon": -112.30503480555555,
         "img": "photos/SAMSUNG_20221128_204330.jpg",
-        "title": "SAMSUNG_20221128_204330.jpg"
+        "title": "SAMSUNG_20221128_204330.jpg",
+        "screenshot": "screenshot/SAMSUNG_20221128_204330.png"
     },
     {
         "lat": 37.71371719444445,
         "lon": -112.22397388888889,
         "img": "photos/SAMSUNG_20221128_204938.jpg",
-        "title": "SAMSUNG_20221128_204938.jpg"
+        "title": "SAMSUNG_20221128_204938.jpg",
+        "screenshot": "screenshot/SAMSUNG_20221128_204938.png"
     },
     {
         "lat": 37.697032611111105,
         "lon": -112.17865561111111,
         "img": "photos/SAMSUNG_20221128_205244.jpg",
-        "title": "SAMSUNG_20221128_205244.jpg"
+        "title": "SAMSUNG_20221128_205244.jpg",
+        "screenshot": "screenshot/SAMSUNG_20221128_205244.png"
     },
     {
         "lat": 37.63001930555556,
@@ -617,13 +706,15 @@
         "lat": 37.63001930555556,
         "lon": -112.16289761111112,
         "img": "photos/SAMSUNG_20221128_212042.jpg",
-        "title": "SAMSUNG_20221128_212042.jpg"
+        "title": "SAMSUNG_20221128_212042.jpg",
+        "screenshot": "screenshot/SAMSUNG_20221128_212042.png"
     },
     {
         "lat": 37.69462319444444,
         "lon": -112.16368038888889,
         "img": "photos/SAMSUNG_20221128_220504.jpg",
-        "title": "SAMSUNG_20221128_220504.jpg"
+        "title": "SAMSUNG_20221128_220504.jpg",
+        "screenshot": "screenshot/SAMSUNG_20221128_220504.png"
     },
     {
         "lat": 37.6303215,
@@ -677,10 +768,12 @@
 
         // --- 4. Création des marqueurs ---
         photos.forEach(function(point) {
+            var screenshotArg = point.screenshot ? point.screenshot : "";
+
             // Création du contenu HTML de la bulle
             var popupContent = `
                 <div class="custom-popup">
-                    <img src="${point.img}" alt="${point.title}">
+                    <img src="${point.img}" alt="${point.title}" onclick="openModal('${point.img}', '${screenshotArg}')">
                     <h3>${point.title}</h3>
                     <p style="margin: 5px 0 0 0; font-size: 0.8em; color: #666;">${point.lat.toFixed(6)}, ${point.lon.toFixed(6)}</p>
                 </div>

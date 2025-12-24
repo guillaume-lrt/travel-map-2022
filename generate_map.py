@@ -363,12 +363,25 @@ def main():
                     # Add to map data
                     # Path needs to be relative to the HTML file for the browser
                     web_path = f"{PHOTOS_DIR}/{final_filename}"
-                    new_photos_data.append({
+                    
+                    photo_data = {
                         "lat": lat,
                         "lon": lon,
                         "img": web_path,
                         "title": final_filename
-                    })
+                    }
+                    
+                    # Check for screenshot (robust check for different extensions or case)
+                    screenshot_dir = "screenshot"
+                    if os.path.exists(screenshot_dir):
+                        target_base = os.path.splitext(final_filename)[0].lower()
+                        for f in os.listdir(screenshot_dir):
+                            if f.startswith("."): continue
+                            if os.path.splitext(f)[0].lower() == target_base:
+                                photo_data["screenshot"] = f"{screenshot_dir}/{f}"
+                                break
+                    
+                    new_photos_data.append(photo_data)
                 else:
                     # print(f'{lat = }')
                     # print(f'{lon = }')
